@@ -11,16 +11,16 @@ class DissectorPlugin:
          :type _what dictates which plugin to run when analyzing
     """
 
-    def __init__(self, what, path="", flag=False):
+    def __init__(self, what, path=""):
         """
         Creates a new instance of a dissector plugin
         :param what: the object to be analyzed
         :param path: the path to the file to save the analysis result
-        :param flag: if true the analysis is saved to file, otherwise is not
+        :param analysis: where is store the analysis done
         """
         self.what = what
         self.path = path
-        self.flag = flag
+        self.analysis = None
 
     @abstractmethod
     def analyze(self):
@@ -30,24 +30,29 @@ class DissectorPlugin:
         """
         pass
 
-    def getWhat(self):
+    def get_what(self):
         """Get the object to be analyzed"""
         return self.what
 
-    def setWhat(self, what):
+    def set_what(self, what):
         """Set the object to analyze
             :param what is the object to be analyzed
         """
         self.what = what
 
-    def saveAnalysisToFile(self, path, flag):
+    def get_analysis(self):
+        """
+        Get the analysis done
+        :return: the analysis done
+        """
+        return self.analysis
+
+    @abstractmethod
+    def save_analysis_to_file(self, path):
         """
         Saves the analysis result to the specified path
-        :param flag: if true the analysis will be saved, otherwise it won't
         :param path: the path where to save the analysis
-        :return: true if the analysis will be saved, false otherwise
         """
         self.path = path
-        self.flag = flag
-        return flag
+        pass
 

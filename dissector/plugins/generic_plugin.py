@@ -7,38 +7,37 @@ class DissectorPlugin:
 
     """This is an abstract class to implement creating a new plugin
         Attributes:
-         :param _what the object to analyze
-         :type _what dictates which plugin to run when analyzing
+         :param _target the object to analyze
+         :type _target dictates which plugin to run when analyzing
     """
 
-    def __init__(self, what, path=""):
+    def __init__(self, target, path=""):
         """
         Creates a new instance of a dissector plugin
-        :param what: the object to be analyzed
+        :param target: the object to be analyzed
         :param path: the path to the file to save the analysis result
-        :param analysis: where is store the analysis done
         """
-        self.what = what
+        self.target = target
         self.path = path
         self.analysis = None
 
     @abstractmethod
     def analyze(self):
         """
-        This method should analyze the what object and return a result object
+        This method should analyze the target object and return a result object
         :return: the result object
         """
         pass
 
-    def get_what(self):
+    def get_target(self):
         """Get the object to be analyzed"""
-        return self.what
+        return self.target
 
-    def set_what(self, what):
+    def set_target(self, target):
         """Set the object to analyze
-            :param what is the object to be analyzed
+            :param target is the object to be analyzed
         """
-        self.what = what
+        self.target = target
 
     def get_analysis(self):
         """
@@ -55,4 +54,3 @@ class DissectorPlugin:
         """
         self.path = path
         pass
-

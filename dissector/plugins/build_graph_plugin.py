@@ -6,8 +6,8 @@ from androguard.core.bytecodes import dvm
 
 from dissector.plugins.generic_plugin import DissectorPlugin
 
-class BuildGraphPlugin(DissectorPlugin):
 
+class BuildGraphPlugin(DissectorPlugin):
     """This plugin emulates the androgexf plugin of androguard
     to build a method calls graph given an apk or dex file.
     """

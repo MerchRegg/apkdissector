@@ -1,20 +1,14 @@
-import os
-
-from collector.pscoutDB import PScoutDB
-from collector.pscoutDB import Permission
-
 __author__ = 'sergio'
 
-class Reader:
+class Fixer:
 
-    def __init__(self,path, dbpath):
+    def __init__(self,path):
         self.path = path    #Path JSON File with enforcements
         self.fd = None
-        self.db = None
-        self.dbpath = dbpath
         self.start()
 
     def start(self):    #Working method
+        self._open('r')
         self.checkFixNeeded()
 
     '''
@@ -24,36 +18,28 @@ class Reader:
     def checkFixNeeded(self):
         self._open('rb+')
         self.fd.seek(-1,2)
-        if self.fd.read() == ',' :
+        r = self.fd.read()
+        r.rstrip()
+        if self.fd.read() == ',':
             self._close()
-            self.fixNotEnded()
+            self.fixNotEnded(1)
+        elif self.fd.read() == '':
+            self._close()
+            self.fixNotEnded(2)
         else:
             print "[*] JSON file well formed. Fixing not needed..."
 
     '''
         Enforcement JSON files end with a ','. Its necessary to delete it and add ']}'
     '''
-    def fixNotEnded(self):
+    def fixNotEnded(self,position):
         print "[*] Fixing the file to a well formed JSON..."
         self._open('a')  #Getting file descriptor
         size = self.fd.tell() #Get size
-        self.fd.truncate(size-1)
+        self.fd.truncate(size - position)
         self.fd.seek(0,2)  #2 = SEEK_END
-        self._write("}]}")
+        self._write("]}")
         self._close()
-
-    def checkPermissionInfo(self,permission):
-        self._open('r')
-        self.db = PScoutDB(None,self.dbpath)
-        array = self.db.querypermission(permission)
-
-        #Check interesting permission methods
-        self.lookForInterestingMethods(array)
-
-    def lookForInterestingMethods(self,array):
-
-        for permission in array:
-            print "foo"
 
     def _open(self,mode):
         self.fd = open(self.path, mode)

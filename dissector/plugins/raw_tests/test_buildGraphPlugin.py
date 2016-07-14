@@ -2,7 +2,7 @@ from unittest import TestCase
 from dissector.plugins.build_graph_plugin import BuildGraphPlugin
 
 class TestBuildGraphPlugin(TestCase):
-
+    """
     def test_analyze(self):
         wrong_dir = "/home/marco/APKs/tcpchat/wrong_dir.txt"
         right_dir = "/home/marco/APKs/tcpchat/app-debug.apk"
@@ -24,5 +24,16 @@ class TestBuildGraphPlugin(TestCase):
         trimmed_dir = "/home/marco/APKs/tcpchat/app-debug_graph_trimmed.gexf"
 
         buildgraph = BuildGraphPlugin(right_dir)
+        buildgraph.analyze()
         buildgraph.trim_graph("support")
         buildgraph.trimmed_analysis_to_file(trimmed_dir)
+"""
+
+    def test_sub(self):
+        right_dir = "/home/marco/APKs/tcpchat/app-debug.apk"
+        subbed_dir = "/home/marco/APKs/tcpchat/app-debug_graph_subbed.gexf"
+
+        buildgraph = BuildGraphPlugin(right_dir)
+        buildgraph.analyze()
+        buildgraph.class_sub_graph("support")
+        #buildgraph.trimmed_analysis_to_file(subbed_dir)

@@ -20,6 +20,7 @@ class BuildGraphPlugin(DissectorPlugin):
         super(BuildGraphPlugin, self).__init__(target)
         self.gvmx = None
         self.trimmed_analysis = None
+        self.class_subbed_analysis = None
 
     def save_analysis_to_file(self, path):
         """
@@ -77,19 +78,58 @@ class BuildGraphPlugin(DissectorPlugin):
         :param trim_regex: the regex to match with every node label
         """
         print("Trimming graph")
-        if(self.gvmx is None):
+        if self.gvmx is None:
             raise ValueError("There is no graph to be trimmed!")
+        trimmed = ganalysis.Graph()
         pat = re.compile(trim_regex)
-        for node in self.gvmx.G.nodes():
-            label = self.gvmx.nodes_id[node].label
-            #print("Analyzing node with label: %s", label)
-            if pat.search(label):
-                #print("Removing node with label: %s", label)
-                before = self.gvmx.G.number_of_nodes()
-                self.gvmx.G.remove_node(node)
-                after = self.gvmx.G.number_of_nodes()
-                #print("Nodes before:%s after:%s", before, after)
+
+        for edge in self.gvmx.G.edges():
+            label = self.gvmx.nodes_id[edge[0]].label + self.gvmx.nodes_id[edge[1]].label
+            if pat.search(label) is None:
+                trimmed.add_edge(edge[0],edge[1])
+
+        temp = self.gvmx.G
+        self.gvmx.G = trimmed
         self.trimmed_analysis = self.gvmx.export_to_gexf()
-        #print(self.trimmed_analysis)
+        self.gvmx.G = temp
+
+    def class_sub_graph(self, class_names):
+        """
+        Gets a subset of the analyzed graph made of paths from the nodes of the methods in the classes with
+        given class_name
+        :param class_names: the name of the classes of interest
+        """
+        print("Subsetting graph")
+        if self.gvmx is None:
+            raise ValueError("There is no graph to be trimmed!")
+
+        subbed = ganalysis.Graph()
+        visited = {}
+        pat = []
+
+        for class_name in class_names:
+            pat.append(re.compile(class_name))
+
+        for node in self.gvmx.G.nodes():
+            if node not in visited:
+                current = self.gvmx.nodes_id[node]
+                label =  current.label
+                #make it more efficient
+                for pattern in pat:
+                    if pattern.search(label) is not None:
+                        found = True
+                if found:
+                    path = self.gvmx.get_paths(current.class_name, current.method_name, current.descriptor)
+                    for node_in_path in path:
+                        visited[node_in_path] = True
+                    subbed.add_path(path)
+                visited[node] = True
+
+        temp = self.gvmx.G
+        self.gvmx.G = subbed
+        self.class_subbed_analysis = self.gvmx.export_to_gexf()
+        print(self.class_subbed_analysis)
+        self.gvmx.G = temp
+
 
 

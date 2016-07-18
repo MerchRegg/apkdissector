@@ -44,6 +44,16 @@ class BuildGraphPlugin(DissectorPlugin):
         else:
             raise ValueError("There is no graph to be saved!")
 
+    def subbed_analysis_to_file(self, path):
+        """
+        Saves the subgraph analysis done to the specified path
+        :param path: the path to which save the analysis
+        """
+        if self.class_subbed_analysis is not None:
+            androconf.save_to_disk(self.class_subbed_analysis, path)
+        else:
+            raise ValueError("There is no graph to be saved!")
+
     def analyze(self):
         """
         Analyzes an apk or dex file specified and saves it.
@@ -93,6 +103,27 @@ class BuildGraphPlugin(DissectorPlugin):
         self.trimmed_analysis = self.gvmx.export_to_gexf()
         self.gvmx.G = temp
 
+    def bf_graph(self, original_graph, nodes, visited, start):
+        # print("getting subgraph of " + self.gvmx.nodes_id[start].label)
+        queue = [start]
+        while queue:
+            current = queue.pop()
+            if current not in visited:
+                #print("Analyzing " + self.gvmx.nodes_id[current].label)
+                neighbors = original_graph.neighbors(current)
+                for neighbor in neighbors:
+                    #print("Found neighbor " + self.gvmx.nodes_id[neighbor].label)
+                    if neighbor not in visited:
+                        visited[neighbor] = True
+                        #print("Adding edge " + self.gvmx.nodes_id[current].label + "->" + self.gvmx.nodes_id[neighbor].label)
+                        nodes.append(current)
+                        nodes.append(neighbor)
+                        #nodes.append(self.gvmx.nodes_id[neighbor])
+                        queue.append(neighbor)
+                    #else:
+                        #print("Already visited")
+                visited[current] = True
+
     def class_sub_graph(self, class_names):
         """
         Gets a subset of the analyzed graph made of paths from the nodes of the methods in the classes with
@@ -101,9 +132,9 @@ class BuildGraphPlugin(DissectorPlugin):
         """
         print("Subsetting graph")
         if self.gvmx is None:
-            raise ValueError("There is no graph to be trimmed!")
+            raise ValueError("There is no graph to be subbed!")
 
-        subbed = ganalysis.Graph()
+        nodes = []
         visited = {}
         pat = []
 
@@ -111,6 +142,7 @@ class BuildGraphPlugin(DissectorPlugin):
             pat.append(re.compile(class_name))
 
         for node in self.gvmx.G.nodes():
+            found = False
             if node not in visited:
                 current = self.gvmx.nodes_id[node]
                 label =  current.label
@@ -119,17 +151,18 @@ class BuildGraphPlugin(DissectorPlugin):
                     if pattern.search(label) is not None:
                         found = True
                 if found:
-                    path = self.gvmx.get_paths(current.class_name, current.method_name, current.descriptor)
-                    for node_in_path in path:
-                        visited[node_in_path] = True
-                    subbed.add_path(path)
-                visited[node] = True
+                    self.bf_graph(self.gvmx.G, nodes, visited, node)
 
         temp = self.gvmx.G
-        self.gvmx.G = subbed
+        self.gvmx.G = self.gvmx.G.subgraph(nodes)
         self.class_subbed_analysis = self.gvmx.export_to_gexf()
-        print(self.class_subbed_analysis)
+        #print(self.class_subbed_analysis)
         self.gvmx.G = temp
+
+
+
+
+
 
 
 

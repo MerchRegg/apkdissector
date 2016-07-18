@@ -18,7 +18,9 @@ class TestBuildGraphPlugin(TestCase):
         buildgraph.analyze()
         buildgraph.save_analysis_to_file(complete_dir)
         self.assertEqual(expected_graph, buildgraph.analysis)
+    """
 
+    """
     def test_trim(self):
         right_dir = "/home/marco/APKs/tcpchat/app-debug.apk"
         trimmed_dir = "/home/marco/APKs/tcpchat/app-debug_graph_trimmed.gexf"
@@ -27,8 +29,8 @@ class TestBuildGraphPlugin(TestCase):
         buildgraph.analyze()
         buildgraph.trim_graph("support")
         buildgraph.trimmed_analysis_to_file(trimmed_dir)
-"""
 
+    """
     def test_sub(self):
         right_dir = "/home/marco/APKs/tcpchat/app-debug.apk"
         subbed_dir = "/home/marco/APKs/tcpchat/app-debug_graph_subbed.gexf"
@@ -36,4 +38,4 @@ class TestBuildGraphPlugin(TestCase):
         buildgraph = BuildGraphPlugin(right_dir)
         buildgraph.analyze()
         buildgraph.class_sub_graph("support")
-        #buildgraph.trimmed_analysis_to_file(subbed_dir)
+        buildgraph.subbed_analysis_to_file(subbed_dir)

@@ -6,7 +6,7 @@ __author__ = 'vaioco'
 from androguard.core import *
 from androguard.core.bytecode import *
 from androguard.core.bytecodes.dvm import *
-from androguard.core.bytecodes.apk import *
+from dissector.plugins.libs.androguard.androguard.core.bytecodes.apk import *
 from androguard.core.analysis.analysis import newVMAnalysis
 from core.utils import *
 from cPickle import dumps, loads

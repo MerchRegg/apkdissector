@@ -1,9 +1,14 @@
-from androguard.core import androconf
-from androguard.core.analysis import analysis
-from androguard.core.analysis import ganalysis
-from androguard.core.bytecodes import apk
-from androguard.core.bytecodes import dvm
+# from androguard.core import androconf
+# from androguard.core.analysis import analysis
+# from androguard.core.analysis import ganalysis
+# from androguard.core.bytecodes import apk
+# from androguard.core.bytecodes import dvm
 import re
+from dissector.plugins.libs.androguard.androguard.core import androconf
+from dissector.plugins.libs.androguard.androguard.core.analysis import analysis
+from dissector.plugins.libs.androguard.androguard.core.analysis import ganalysis
+from dissector.plugins.libs.androguard.androguard.core.bytecodes import apk
+from dissector.plugins.libs.androguard.androguard.core.bytecodes import dvm
 
 from dissector.plugins.generic_plugin import DissectorPlugin
 
@@ -54,7 +59,7 @@ class BuildGraphPlugin(DissectorPlugin):
         else:
             raise ValueError("There is no graph to be saved!")
 
-    def analyze(self):
+    def analyze(self, classes_of_interest = []):
         """
         Analyzes an apk or dex file specified and saves it.
         """
@@ -75,12 +80,33 @@ class BuildGraphPlugin(DissectorPlugin):
         else:
             raise ValueError("Invalid target to analyze!")
 
+        vm.set_classes_of_intetest(classes_of_interest)
         vmx = analysis.VMAnalysis(vm)
         self.gvmx = ganalysis.GVMAnalysis(vmx, a)
 
         self.analysis = self.gvmx.export_to_gexf()
         print("Analyzed")
 
+        log  =  open("log.log" , "wr")
+        #for i in vm.get_all_fields():
+            #print i.show()
+        """
+        for i in vm.get_methods():
+            log.write("_____________________START_______________________\n")
+            log.write(i.get_name() + "|||" + i.get_class_name() + "|||"+i.get_descriptor()+"\n")
+            log.write("______________________END________________________\n")
+
+        vm = vmx.get_vm()
+        for j in vmx.get_tainted_packages().get_internal_packages() :
+            print "_____________________START_______________________"
+            print j.get_src(vm.get_class_manager() )
+            print j.get_dst(vm.get_class_manager() )
+            print "______________________END________________________"
+        """
+        # for c in vm.get_classes():
+        #     print "_____________________START_______________________"
+        #     print c.show()
+        #     print "_____________________END_______________________"
 
     def trim_graph(self, trim_regex):
         """
@@ -97,11 +123,15 @@ class BuildGraphPlugin(DissectorPlugin):
             label = self.gvmx.nodes_id[edge[0]].label + self.gvmx.nodes_id[edge[1]].label
             if pat.search(label) is None:
                 trimmed.add_edge(edge[0],edge[1])
+        self.gvmx.G = trimmed
+        self.trimmed_analysis = self.gvmx.export_to_gexf()
 
+        """
         temp = self.gvmx.G
         self.gvmx.G = trimmed
         self.trimmed_analysis = self.gvmx.export_to_gexf()
         self.gvmx.G = temp
+        """
 
     def bf_graph(self, original_graph, nodes, visited, start):
         # print("getting subgraph of " + self.gvmx.nodes_id[start].label)
@@ -124,11 +154,11 @@ class BuildGraphPlugin(DissectorPlugin):
                         #print("Already visited")
                 visited[current] = True
 
-    def class_sub_graph(self, class_names):
+    def sub(self, class_names):
         """
         Gets a subset of the analyzed graph made of paths from the nodes of the methods in the classes with
         given class_name
-        :param class_names: the name of the classes of interest
+        :param class_names: the array of names of the classes of interest
         """
         print("Subsetting graph")
         if self.gvmx is None:
@@ -138,7 +168,9 @@ class BuildGraphPlugin(DissectorPlugin):
         visited = {}
         pat = []
 
-        for class_name in class_names:
+        while class_names:
+            class_name = class_names.pop()
+            print "subsetting for: " + class_name
             pat.append(re.compile(class_name))
 
         for node in self.gvmx.G.nodes():
@@ -153,11 +185,38 @@ class BuildGraphPlugin(DissectorPlugin):
                 if found:
                     self.bf_graph(self.gvmx.G, nodes, visited, node)
 
+        self.gvmx.G = self.gvmx.G.subgraph(nodes)
+        self.class_subbed_analysis = self.gvmx.export_to_gexf()
+        """
         temp = self.gvmx.G
         self.gvmx.G = self.gvmx.G.subgraph(nodes)
         self.class_subbed_analysis = self.gvmx.export_to_gexf()
         #print(self.class_subbed_analysis)
         self.gvmx.G = temp
+        """
+
+    def trim_sub_save(self, class_names, trim_regex, path):
+        temp = self.gvmx.G
+        self.trim_graph(trim_regex)
+        self.sub(class_names)
+        print "post sub"
+        self.gvmx.G = temp
+        if self.class_subbed_analysis is not None:
+            androconf.save_to_disk(self.class_subbed_analysis, path)
+        else:
+            raise ValueError("There is no graph to be saved!")
+
+    def analyze_trim(self, trim_regex):
+        temp = self.gvmx.G
+        ret = self.trim_graph(trim_regex)
+        self.gvmx.G = temp
+        return ret
+
+    def analyze_sub(self, class_names):
+        temp = self.gvmx.G
+        ret = self.sub(class_names)
+        self.gvmx.G = temp
+        return ret
 
 
 

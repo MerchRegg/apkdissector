@@ -22,9 +22,9 @@ from xml.sax.saxutils import escape, unescape
 import sys, hashlib, os
 from optparse import OptionParser
 
-from androguard.core.bytecodes import apk, dvm
-from androguard.core.analysis import analysis, ganalysis
-from androguard.core import androconf
+from dissector.plugins.libs.androguard.androguard.core.bytecodes import apk, dvm
+from dissector.plugins.libs.androguard.androguard.core.analysis import analysis, ganalysis
+from dissector.plugins.libs.androguard.androguard.core import androconf
 
 option_0 = { 'name' : ('-i', '--input'), 'help' : 'filename input (dex, apk)', 'nargs' : 1 }
 option_1 = { 'name' : ('-o', '--output'), 'help' : 'filename output of the gexf', 'nargs' : 1 }

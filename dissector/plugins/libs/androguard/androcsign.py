@@ -20,7 +20,7 @@
 
 import sys
 
-from androguard.core import androconf
+from dissector.plugins.libs.androguard.androguard.core import androconf
 
 sys.path.append("./elsim/")
 from elsim.elsign import dalvik_elsign

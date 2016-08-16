@@ -22,8 +22,8 @@ from xml.sax.saxutils import escape
 import sys, os
 from optparse import OptionParser
 
-from androguard.core.androgen import Androguard
-from androguard.core.analysis import analysis
+from dissector.plugins.libs.androguard.androguard.core.androgen import Androguard
+from dissector.plugins.libs.androguard.androguard.core.analysis import analysis
 
 option_0 = { 'name' : ('-i', '--input'), 'help' : 'filename input', 'nargs' : 1 }
 option_1 = { 'name' : ('-o', '--output'), 'help' : 'filename output of the xgmml', 'nargs' : 1 }

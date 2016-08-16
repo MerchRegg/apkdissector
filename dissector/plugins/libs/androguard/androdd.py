@@ -22,10 +22,10 @@ import sys, os
 
 from optparse import OptionParser
 
-from androguard.core.androgen import Androguard
-from androguard.core import androconf
-from androguard.core.analysis import analysis
-from androguard.core.bytecode import method2dot, method2format
+from dissector.plugins.libs.androguard.androguard.core.androgen import Androguard
+from dissector.plugins.libs.androguard.androguard.core import androconf
+from dissector.plugins.libs.androguard.androguard.core.analysis import analysis
+from dissector.plugins.libs.androguard.androguard.core.bytecode import method2dot, method2format
 
 option_0 = { 'name' : ('-i', '--input'), 'help' : 'file : use this filename', 'nargs' : 1 }
 option_1 = { 'name' : ('-o', '--output'), 'help' : 'base directory to output all files', 'nargs' : 1 }

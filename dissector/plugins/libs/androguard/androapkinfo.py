@@ -22,10 +22,10 @@ import sys, os
 
 from optparse import OptionParser
 
-from androguard.core import androconf
-from androguard.core.bytecodes import apk
-from androguard.core.bytecodes import dvm
-from androguard.core.analysis import analysis 
+from dissector.plugins.libs.androguard.androguard.core import androconf
+from dissector.plugins.libs.androguard.androguard.core.bytecodes import apk
+from dissector.plugins.libs.androguard.androguard.core.bytecodes import dvm
+from dissector.plugins.libs.androguard.androguard.core.analysis import analysis
 
 option_0 = { 'name' : ('-i', '--input'), 'help' : 'file : use this filename (APK)', 'nargs' : 1 }
 option_1 = { 'name' : ('-d', '--directory'), 'help' : 'directory : use this directory', 'nargs' : 1 }

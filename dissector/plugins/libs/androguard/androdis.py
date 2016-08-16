@@ -22,9 +22,9 @@
 import sys
 import os
 from optparse import OptionParser
-from androguard.core import androconf
-from androguard.core.bytecodes import dvm
-from androguard.core.bytecodes.apk import *
+from dissector.plugins.libs.androguard.androguard.core import androconf
+from dissector.plugins.libs.androguard.androguard.core.bytecodes import dvm
+from dissector.plugins.libs.androguard.androguard.core.bytecodes.apk import *
 
 option_0 = { 'name' : ('-i', '--input'), 'help' : 'file : use this filename (DEX/ODEX)', 'nargs' : 1 }
 option_1 = { 'name' : ('-o', '--offset'), 'help' : 'offset to disassemble', 'nargs' : 1 }

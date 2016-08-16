@@ -1,8 +1,8 @@
-# from androguard.core import androconf
-# from androguard.core.analysis import analysis
-# from androguard.core.analysis import ganalysis
-# from androguard.core.bytecodes import apk
-# from androguard.core.bytecodes import dvm
+# from dissector.plugins.libs.androguard.core import androconf
+# from dissector.plugins.libs.androguard.core.analysis import analysis
+# from dissector.plugins.libs.androguard.core.analysis import ganalysis
+# from dissector.plugins.libs.androguard.core.bytecodes import apk
+# from dissector.plugins.libs.androguard.core.bytecodes import dvm
 import re
 from dissector.plugins.libs.androguard.androguard.core import androconf
 from dissector.plugins.libs.androguard.androguard.core.analysis import analysis
@@ -65,23 +65,26 @@ class BuildGraphPlugin(DissectorPlugin):
         """
         ret_type = androconf.is_android(self.target)
         vm = None
+        vms = []
         a = None
         if ret_type == "APK":
             a = apk.APK(self.target)
             if a.is_valid_APK():
-                vm = dvm.DalvikVMFormat(a.get_dex())
+                for d in a.get_all_dex():
+                    vms.append(dvm.DalvikVMFormat(d))
+                #vm = dvm.DalvikVMFormat(a.get_all_dex())
             else:
                 print "INVALID APK"
         elif ret_type == "DEX":
             try:
-                vm = dvm.DalvikVMFormat(open(self.target, "rb").read())
+                vms = [dvm.DalvikVMFormat(open(self.target, "rb").read())]
             except Exception, e:
                 print "INVALID DEX", e
         else:
             raise ValueError("Invalid target to analyze!")
 
-        vm.set_classes_of_intetest(classes_of_interest)
-        vmx = analysis.VMAnalysis(vm)
+        #vm.set_classes_of_intetest(classes_of_interest)
+        vmx = analysis.newVMAnalysis(vms)
         self.gvmx = ganalysis.GVMAnalysis(vmx, a)
 
         self.analysis = self.gvmx.export_to_gexf()

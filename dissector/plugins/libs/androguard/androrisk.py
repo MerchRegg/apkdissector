@@ -22,9 +22,9 @@ import sys, os
 
 from optparse import OptionParser
 
-from androguard.core import androconf
-from androguard.core.bytecodes import apk
-from androguard.core.analysis import risk
+from dissector.plugins.libs.androguard.androguard.core import androconf
+from dissector.plugins.libs.androguard.androguard.core.bytecodes import apk
+from dissector.plugins.libs.androguard.androguard.core.analysis import risk
 
 option_0 = { 'name' : ('-i', '--input'), 'help' : 'file : use these filenames', 'nargs' : 1 }
 option_1 = { 'name' : ('-m', '--method'), 'help' : 'perform analysis of each method', 'action' : 'count' }

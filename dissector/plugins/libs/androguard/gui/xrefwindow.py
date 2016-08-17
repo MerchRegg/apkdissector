@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
-from androguard.core import androconf
-from androguard.gui.helpers import display2classmethod, class2func, classmethod2display, method2func
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.gui.helpers import display2classmethod, class2func, classmethod2display, method2func
 
 
 class XrefDialogClass(QtWidgets.QDialog):

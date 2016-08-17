@@ -25,8 +25,8 @@ import imp
 
 ANDROGUARD_VERSION = "3.0-dev"
 
-from androguard.core.api_specific_resources.aosp_permissions.aosp_permissions import AOSP_PERMISSIONS
-from androguard.core.api_specific_resources.api_permission_mappings.api_permission_mappings import AOSP_PERMISSIONS_MAPPINGS
+from dissector.plugins.libs.androguard.core.api_specific_resources.aosp_permissions.aosp_permissions import AOSP_PERMISSIONS
+from dissector.plugins.libs.androguard.core.api_specific_resources.api_permission_mappings.api_permission_mappings import AOSP_PERMISSIONS_MAPPINGS
 
 
 def is_ascii_problem(s):

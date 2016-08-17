@@ -4,8 +4,8 @@ import TextSelection
 
 from PyQt5 import QtGui, QtCore
 
-from androguard.core.bytecodes import dvm
-from androguard.core import androconf
+from dissector.plugins.libs.androguard.core.bytecodes import dvm
+from dissector.plugins.libs.androguard.core import androconf
 
 MNEMONIC_COLUMN = 30
 MNEMONIC_WIDTH = 30

@@ -21,22 +21,22 @@ sys.path.append('./')
 import logging
 import struct
 from collections import defaultdict
-import androguard.core.androconf as androconf
-import androguard.decompiler.dad.util as util
-from androguard.core.analysis import analysis
-from androguard.core.bytecodes import apk, dvm
-from androguard.decompiler.dad.ast import (
+import dissector.plugins.libs.androguard.core.androconf as androconf
+import dissector.plugins.libs.androguard.decompiler.dad.util as util
+from dissector.plugins.libs.androguard.core.analysis import analysis
+from dissector.plugins.libs.androguard.core.bytecodes import apk, dvm
+from dissector.plugins.libs.androguard.decompiler.dad.ast import (
     JSONWriter, parse_descriptor, literal_string, literal_null, literal_int,
     literal_long, literal_float, literal_double, literal_bool, literal_hex_int,
     dummy)
-from androguard.decompiler.dad.control_flow import identify_structures
-from androguard.decompiler.dad.dataflow import (
+from dissector.plugins.libs.androguard.decompiler.dad.control_flow import identify_structures
+from dissector.plugins.libs.androguard.decompiler.dad.dataflow import (
     build_def_use, place_declarations, dead_code_elimination,
     register_propagation, split_variables)
-from androguard.decompiler.dad.graph import construct, simplify, split_if_nodes
-from androguard.decompiler.dad.instruction import Param, ThisParam
-from androguard.decompiler.dad.writer import Writer
-from androguard.util import read
+from dissector.plugins.libs.androguard.decompiler.dad.graph import construct, simplify, split_if_nodes
+from dissector.plugins.libs.androguard.decompiler.dad.instruction import Param, ThisParam
+from dissector.plugins.libs.androguard.decompiler.dad.writer import Writer
+from dissector.plugins.libs.androguard.util import read
 
 
 def auto_vm(filename):
@@ -113,7 +113,7 @@ class DvMethod(object):
                 self.var_to_name[param] = Param(param, ptype)
                 num_param += util.get_type_size(ptype)
         if not __debug__:
-            from androguard.core import bytecode
+            from dissector.plugins.libs.androguard.core import bytecode
             bytecode.method2png('/tmp/dad/graphs/%s#%s.png' % \
                 (self.cls_name.split('/')[-1][:-1], self.name), methanalysis)
 

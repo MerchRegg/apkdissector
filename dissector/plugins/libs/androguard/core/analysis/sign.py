@@ -15,8 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from androguard.core.analysis.analysis import TAINTED_PACKAGE_CREATE, TAINTED_PACKAGE_CALL
-from androguard.core.bytecodes import dvm
+from dissector.plugins.libs.androguard.core.analysis.analysis import TAINTED_PACKAGE_CREATE, TAINTED_PACKAGE_CALL
+from dissector.plugins.libs.androguard.core.bytecodes import dvm
 
 TAINTED_PACKAGE_INTERNAL_CALL = 2
 FIELD_ACCESS = {"R": 0, "W": 1}

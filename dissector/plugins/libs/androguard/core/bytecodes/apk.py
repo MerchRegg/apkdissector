@@ -15,12 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from androguard.core import bytecode
-from androguard.core import androconf
-from androguard.core.bytecodes.dvm_permissions import DVM_PERMISSIONS
-from androguard.util import read
+from dissector.plugins.libs.androguard.core import bytecode
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.core.bytecodes.dvm_permissions import DVM_PERMISSIONS
+from dissector.plugins.libs.androguard.util import read
 
-from androguard.core.resources import public
+from dissector.plugins.libs.androguard.core.resources import public
 
 import StringIO
 from struct import pack, unpack
@@ -187,7 +187,7 @@ class APK(object):
         if zipmodule == 0:
             self.zip = ChilkatZip(self.__raw)
         elif zipmodule == 2:
-            from androguard.patch import zipfile
+            from dissector.plugins.libs.androguard.patch import zipfile
             self.zip = zipfile.ZipFile(StringIO.StringIO(self.__raw), mode=mode)
         else:
             import zipfile
@@ -816,7 +816,7 @@ class APK(object):
             :type new_files: a dictionnary (key:filename, value:content of the file)
         """
         if self.zipmodule == 2:
-            from androguard.patch import zipfile
+            from dissector.plugins.libs.androguard.patch import zipfile
             zout = zipfile.ZipFile(filename, 'w')
         else:
             import zipfile

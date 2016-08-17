@@ -22,18 +22,18 @@ import sys
 
 from optparse import OptionParser
 
-from androguard.core import *
-from androguard.core.androconf import *
-from androguard.core.bytecode import *
-from androguard.core.bytecodes.dvm import *
-from androguard.core.bytecodes.apk import *
+from dissector.plugins.libs.androguard.core import *
+from dissector.plugins.libs.androguard.core.androconf import *
+from dissector.plugins.libs.androguard.core.bytecode import *
+from dissector.plugins.libs.androguard.core.bytecodes.dvm import *
+from dissector.plugins.libs.androguard.core.bytecodes.apk import *
 
-from androguard.core.analysis.analysis import *
-from androguard.decompiler.decompiler import *
-from androguard.session import Session
+from dissector.plugins.libs.androguard.core.analysis.analysis import *
+from dissector.plugins.libs.androguard.decompiler.decompiler import *
+from dissector.plugins.libs.androguard.session import Session
 
-from androguard.util import *
-from androguard.misc import *
+from dissector.plugins.libs.androguard.util import *
+from dissector.plugins.libs.androguard.misc import *
 
 from IPython.terminal.embed import InteractiveShellEmbed
 from traitlets.config import Config

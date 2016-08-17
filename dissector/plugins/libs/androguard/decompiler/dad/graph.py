@@ -17,10 +17,10 @@
 
 import logging
 from collections import defaultdict
-from androguard.decompiler.dad.basic_blocks import (build_node_from_block,
+from dissector.plugins.libs.androguard.decompiler.dad.basic_blocks import (build_node_from_block,
                                                     StatementBlock, CondBlock)
-from androguard.decompiler.dad.util import get_type
-from androguard.decompiler.dad.instruction import Variable
+from dissector.plugins.libs.androguard.decompiler.dad.util import get_type
+from dissector.plugins.libs.androguard.decompiler.dad.instruction import Variable
 
 logger = logging.getLogger('dad.graph')
 

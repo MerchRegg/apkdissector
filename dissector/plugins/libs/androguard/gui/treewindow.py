@@ -1,9 +1,9 @@
 from PyQt5 import QtWidgets, QtGui
 
-from androguard.core import androconf
-from androguard.gui.xrefwindow import XrefDialogClass
-from androguard.gui.sourcewindow import SourceWindow
-from androguard.gui.helpers import classdot2class, Signature
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.gui.xrefwindow import XrefDialogClass
+from dissector.plugins.libs.androguard.gui.sourcewindow import SourceWindow
+from dissector.plugins.libs.androguard.gui.helpers import classdot2class, Signature
 
 
 class TreeWindow(QtWidgets.QTreeWidget):

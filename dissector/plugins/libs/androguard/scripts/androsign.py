@@ -22,9 +22,9 @@ import sys, os
 
 from optparse import OptionParser
 
-from androguard.core import androconf
-from androguard.core.bytecodes import apk
-from androguard.util import read
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.core.bytecodes import apk
+from dissector.plugins.libs.androguard.util import read
 
 sys.path.append("./elsim/")
 from elsim.elsign import dalvik_elsign

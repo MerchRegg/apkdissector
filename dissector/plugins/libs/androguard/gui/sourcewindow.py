@@ -1,8 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from androguard.core import androconf
-from androguard.gui.helpers import class2func, method2func, classdot2func, classdot2class, proto2methodprotofunc
-from androguard.gui.renamewindow import RenameDialog
-from androguard.gui.xrefwindow import XrefDialogMethod, XrefDialogField
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.gui.helpers import class2func, method2func, classdot2func, classdot2class, proto2methodprotofunc
+from dissector.plugins.libs.androguard.gui.renamewindow import RenameDialog
+from dissector.plugins.libs.androguard.gui.xrefwindow import XrefDialogMethod, XrefDialogField
 
 
 import pyperclip

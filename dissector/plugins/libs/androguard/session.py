@@ -1,12 +1,12 @@
 import hashlib
 import collections
 
-from androguard.core import androconf
-from androguard.core.bytecodes.apk import *
-from androguard.core.bytecodes.dvm import *
-from androguard.core.analysis.analysis import *
-from androguard.decompiler.decompiler import *
-from androguard.misc import save_session, load_session
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.core.bytecodes.apk import *
+from dissector.plugins.libs.androguard.core.bytecodes.dvm import *
+from dissector.plugins.libs.androguard.core.analysis.analysis import *
+from dissector.plugins.libs.androguard.decompiler.decompiler import *
+from dissector.plugins.libs.androguard.misc import save_session, load_session
 
 
 

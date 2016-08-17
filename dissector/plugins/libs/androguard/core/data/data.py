@@ -20,10 +20,10 @@ import os
 from xml.sax.saxutils import escape
 
 
-from androguard.core.analysis import analysis
+from dissector.plugins.libs.androguard.core.analysis import analysis
 
 try:
-    from androguard.core.analysis.libsign.libsign import entropy
+    from dissector.plugins.libs.androguard.core.analysis.libsign.libsign import entropy
 except ImportError:
     import math
     def entropy(data):

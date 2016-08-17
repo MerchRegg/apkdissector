@@ -17,10 +17,10 @@
 
 import logging
 from collections import defaultdict
-from androguard.decompiler.dad.opcode_ins import INSTRUCTION_SET
-from androguard.decompiler.dad.instruction import MoveExceptionExpression
-from androguard.decompiler.dad.node import Node
-from androguard.decompiler.dad.util import get_type
+from dissector.plugins.libs.androguard.decompiler.dad.opcode_ins import INSTRUCTION_SET
+from dissector.plugins.libs.androguard.decompiler.dad.instruction import MoveExceptionExpression
+from dissector.plugins.libs.androguard.decompiler.dad.node import Node
+from dissector.plugins.libs.androguard.decompiler.dad.util import get_type
 
 logger = logging.getLogger('dad.basic_blocks')
 

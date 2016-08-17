@@ -1,8 +1,8 @@
-from androguard.core import androconf
+from dissector.plugins.libs.androguard.core import androconf
 from PyQt5 import QtCore
 
-from androguard.misc import *
-import androguard.session as session
+from dissector.plugins.libs.androguard.misc import *
+import dissector.plugins.libs.androguard.session as session
 
 import traceback
 

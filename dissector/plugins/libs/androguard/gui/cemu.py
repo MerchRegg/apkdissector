@@ -1,6 +1,6 @@
 from PyQt5 import QtGui
 
-from androguard.core import androconf
+from dissector.plugins.libs.androguard.core import androconf
 
 class Cursor(object):
     def __init__(self, x, y):

@@ -4,11 +4,11 @@
 # from dissector.plugins.libs.androguard.core.bytecodes import apk
 # from dissector.plugins.libs.androguard.core.bytecodes import dvm
 import re
-from dissector.plugins.libs.androguard.androguard.core import androconf
-from dissector.plugins.libs.androguard.androguard.core.analysis import analysis
-from dissector.plugins.libs.androguard.androguard.core.analysis import ganalysis
-from dissector.plugins.libs.androguard.androguard.core.bytecodes import apk
-from dissector.plugins.libs.androguard.androguard.core.bytecodes import dvm
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.core.analysis import analysis
+from dissector.plugins.libs.androguard.core.analysis import ganalysis
+from dissector.plugins.libs.androguard.core.bytecodes import apk
+from dissector.plugins.libs.androguard.core.bytecodes import dvm
 
 from dissector.plugins.generic_plugin import DissectorPlugin
 
@@ -71,8 +71,9 @@ class BuildGraphPlugin(DissectorPlugin):
             a = apk.APK(self.target)
             if a.is_valid_APK():
                 for d in a.get_all_dex():
-                    print "adding vms"
+                    print "adding vm.."
                     vms.append(dvm.DalvikVMFormat(d))
+                    print "vm added.."
                 #vm = dvm.DalvikVMFormat(a.get_all_dex())
             else:
                 print "INVALID APK"
@@ -83,13 +84,15 @@ class BuildGraphPlugin(DissectorPlugin):
                 print "INVALID DEX", e
         else:
             raise ValueError("Invalid target to analyze!")
+        print "added all vms, analyzing.."
 
         #vm.set_classes_of_intetest(classes_of_interest)
         vmx = analysis.newVMAnalysis(vms)
+        print "analyzed vms, creating graph.."
         self.gvmx = ganalysis.GVMAnalysis(vmx, a)
-
+        print "graph created, saving to gexf.."
         self.analysis = self.gvmx.export_to_gexf()
-        print("Analyzed")
+        print("Done.")
 
         log  =  open("log.log" , "wr")
         #for i in vm.get_all_fields():

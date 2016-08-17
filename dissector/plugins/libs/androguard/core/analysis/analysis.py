@@ -19,10 +19,10 @@ import re, collections
 import threading, Queue, time
 
 
-from androguard.core.androconf import error, warning, debug, is_ascii_problem,\
+from dissector.plugins.libs.androguard.core.androconf import error, warning, debug, is_ascii_problem,\
     load_api_specific_resource_module
-from androguard.core.bytecodes import dvm
-from androguard.core.bytecodes.api_permissions import DVM_PERMISSIONS_BY_PERMISSION, DVM_PERMISSIONS_BY_ELEMENT
+from dissector.plugins.libs.androguard.core.bytecodes import dvm
+from dissector.plugins.libs.androguard.core.bytecodes.api_permissions import DVM_PERMISSIONS_BY_PERMISSION, DVM_PERMISSIONS_BY_ELEMENT
 
 class DVMBasicBlock(object):
     """
@@ -973,3 +973,35 @@ def is_ascii_obfuscation(vm):
             if is_ascii_problem(method.get_name()):
                 return True
     return False
+
+###########################################################################################
+#These are my additions WARNING!
+
+class PathVar :
+  def __init__(self, access, idx, dst_idx, info_obj) :
+    self.access_flag = access
+    self.idx = idx
+    self.dst_idx = dst_idx
+    self.info_obj = info_obj
+
+  def get_var_info(self) :
+    return self.info_obj.get_info()
+
+  def get_access_flag(self) :
+    return self.access_flag
+
+  def get_dst(self, cm) :
+    method = cm.get_method_ref( self.dst_idx )
+    return method.get_class_name(), method.get_name(), method.get_descriptor()
+
+  def get_idx(self) :
+    return self.idx
+
+
+TAINTED_PACKAGE_CREATE = 0
+TAINTED_PACKAGE_CALL = 1
+
+TAINTED_PACKAGE = {
+   TAINTED_PACKAGE_CREATE : "C",
+   TAINTED_PACKAGE_CALL : "M"
+}

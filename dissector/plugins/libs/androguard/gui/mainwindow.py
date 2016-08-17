@@ -1,18 +1,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import androguard.session as session_module
-from androguard.core import androconf
-from androguard.gui.fileloading import FileLoadingThread
-from androguard.gui.treewindow import TreeWindow
-from androguard.gui.sourcewindow import SourceWindow
-from androguard.gui.stringswindow import StringsWindow
-from androguard.gui.methodswindow import MethodsWindow
-from androguard.gui.resourceswindow import ResourcesWindow
-from androguard.gui.apiwindow import APIWindow
-from androguard.gui.binwindow import binWidget
-from androguard.gui.DataModel import *
+import dissector.plugins.libs.androguard.session as session_module
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.gui.fileloading import FileLoadingThread
+from dissector.plugins.libs.androguard.gui.treewindow import TreeWindow
+from dissector.plugins.libs.androguard.gui.sourcewindow import SourceWindow
+from dissector.plugins.libs.androguard.gui.stringswindow import StringsWindow
+from dissector.plugins.libs.androguard.gui.methodswindow import MethodsWindow
+from dissector.plugins.libs.androguard.gui.resourceswindow import ResourcesWindow
+from dissector.plugins.libs.androguard.gui.apiwindow import APIWindow
+from dissector.plugins.libs.androguard.gui.binwindow import binWidget
+from dissector.plugins.libs.androguard.gui.DataModel import *
 
-from androguard.gui.helpers import class2func
+from dissector.plugins.libs.androguard.gui.helpers import class2func
 
 import os, imp
 

@@ -4,8 +4,8 @@
 import argparse
 import sys
 
-from androguard.core import androconf
-from androguard.gui.mainwindow import MainWindow
+from dissector.plugins.libs.androguard.core import androconf
+from dissector.plugins.libs.androguard.gui.mainwindow import MainWindow
 
 from PyQt5 import QtWidgets, QtGui
 

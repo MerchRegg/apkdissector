@@ -17,8 +17,8 @@
 
 import logging
 from struct import pack, unpack
-import androguard.decompiler.dad.util as util
-from androguard.decompiler.dad.instruction import (
+import dissector.plugins.libs.androguard.decompiler.dad.util as util
+from dissector.plugins.libs.androguard.decompiler.dad.instruction import (
     ArrayLengthExpression, ArrayLoadExpression, ArrayStoreInstruction,
     AssignExpression, BaseClass, BinaryCompExpression, BinaryExpression,
     BinaryExpression2Addr, BinaryExpressionLit, CastExpression,

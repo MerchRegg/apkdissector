@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from androguard.core import bytecode, androconf
-from androguard.core.bytecodes.apk import APK
-from androguard.core.androconf import CONF, debug, warning
+from dissector.plugins.libs.androguard.core import bytecode, androconf
+from dissector.plugins.libs.androguard.core.bytecodes.apk import APK
+from dissector.plugins.libs.androguard.core.androconf import CONF, debug, warning
 
 import sys
 import re

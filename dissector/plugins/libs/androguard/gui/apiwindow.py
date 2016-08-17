@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from androguard.gui.xrefwindow import XrefDialogMethod
+from dissector.plugins.libs.androguard.gui.xrefwindow import XrefDialogMethod
 
 
 class APIWindow(QtWidgets.QWidget):

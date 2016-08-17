@@ -1,12 +1,12 @@
-from androguard.core import *
-from androguard.core.bytecode import *
-from androguard.core.bytecodes.dvm import *
-from androguard.core.bytecodes.apk import *
-from androguard.core.analysis.analysis import *
-from androguard.decompiler.decompiler import *
+from dissector.plugins.libs.androguard.core import *
+from dissector.plugins.libs.androguard.core.bytecode import *
+from dissector.plugins.libs.androguard.core.bytecodes.dvm import *
+from dissector.plugins.libs.androguard.core.bytecodes.apk import *
+from dissector.plugins.libs.androguard.core.analysis.analysis import *
+from dissector.plugins.libs.androguard.decompiler.decompiler import *
 
 from cPickle import dumps, loads
-from androguard.core import androconf
+from dissector.plugins.libs.androguard.core import androconf
 
 
 def init_print_colors():
@@ -146,7 +146,7 @@ def RunDecompiler(d, dx, decompiler, session=None):
 
 def AnalyzeElf(filename, raw=False, session=None):
     # avoid to install smiasm for everybody
-    from androguard.core.binaries.elf import ELF
+    from dissector.plugins.libs.androguard.core.binaries.elf import ELF
 
     e = None
     if raw == False:

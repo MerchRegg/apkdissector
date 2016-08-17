@@ -66,11 +66,17 @@ class BuildGraphPlugin(DissectorPlugin):
         ret_type = androconf.is_android(self.target)
         vm = None
         vms = []
+        dexes = []
         a = None
         if ret_type == "APK":
             a = apk.APK(self.target)
             if a.is_valid_APK():
-                vm = dvm.DalvikVMFormat(a.get_dex())
+                #dexes.append(a.get_all_dex())
+                print "getting dexes.."
+                dexes = [d for d in a.get_all_dex()]
+                print "dexes got!"
+                vm = dvm.DalvikVMFormat(dexes[1])
+                #vm = dvm.DalvikVMFormat(a.get_dex())
                 #         for d in a.get_all_dex():
                 #            print "adding vm.."
                 #            vms.append(dvm.DalvikVMFormat(d))

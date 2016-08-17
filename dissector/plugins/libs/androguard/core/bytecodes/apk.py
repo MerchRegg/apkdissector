@@ -131,6 +131,15 @@ def sign_apk(filename, keystore, storepass):
 
 
 ######################################################## APK FORMAT ########################################################
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+
+class FileNotPresent(Error):
+    pass
+
+
 class APK(object):
     """
         This class can access to all elements in an APK file
@@ -409,7 +418,7 @@ class APK(object):
         try:
             return self.zip.read(filename)
         except KeyError:
-            return ""
+            raise FileNotPresent(filename)
 
     def get_dex(self):
         """
@@ -811,6 +820,25 @@ class APK(object):
             print "\t", i, filters or ""
 
         print "PROVIDERS: ", self.get_providers()
+
+    ######################################################################################
+    # WARNING These are my additions WARNING#
+    def get_all_dex(self):
+        """
+            Return the raw data of all classes dex files
+
+            :rtype: a generator
+        """
+        try:
+            yield self.get_file("classes.dex")
+
+            # Multidex support
+            basename = "classes%d.dex"
+            for i in xrange(2, sys.maxint):
+                yield self.get_file(basename % i)
+        except FileNotPresent:
+            pass
+    #######################################################################################
 
 
 def show_Certificate(cert):

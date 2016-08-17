@@ -55,9 +55,11 @@ class TestBuildGraphPlugin(TestCase):
 
     def test_trim(self):
         #right_dir = "/home/marco/apks/testapp/vulnerable.apk"
-        right_dir = "/home/marco/apks/facebook/com.facebook.katana_v89.0.0.17.70.apk"
+        #right_dir = "/home/marco/apks/facebook/com.facebook.katana_v89.0.0.17.70.apk"
+        right_dir = "/home/marco/apks/twitter/com.twitter.android_caac238c.apk"
         #trimmed_dir = "/home/marco/apks/testapp/vulnerable_graph_trimmed.gexf"
-        trimmed_dir = "/home/marco/apks/facebook/trimmed_facebook.gexf"
+        #trimmed_dir = "/home/marco/apks/facebook/trimmed_facebook.gexf"
+        trimmed_dir = "/home/marco/apks/twitter/trimmed_twitter.gexf"
         buildgraph = BuildGraphPlugin(right_dir)
         buildgraph.analyze()
         buildgraph.trim_graph("support")

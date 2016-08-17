@@ -71,6 +71,7 @@ class BuildGraphPlugin(DissectorPlugin):
             a = apk.APK(self.target)
             if a.is_valid_APK():
                 for d in a.get_all_dex():
+                    print "adding vms"
                     vms.append(dvm.DalvikVMFormat(d))
                 #vm = dvm.DalvikVMFormat(a.get_all_dex())
             else:

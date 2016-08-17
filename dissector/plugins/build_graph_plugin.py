@@ -70,16 +70,18 @@ class BuildGraphPlugin(DissectorPlugin):
         if ret_type == "APK":
             a = apk.APK(self.target)
             if a.is_valid_APK():
-                for d in a.get_all_dex():
-                    print "adding vm.."
-                    vms.append(dvm.DalvikVMFormat(d))
-                    print "vm added.."
+                vm = dvm.DalvikVMFormat(a.get_dex())
+                #         for d in a.get_all_dex():
+                #            print "adding vm.."
+                #            vms.append(dvm.DalvikVMFormat(d))
+                #            print "vm added.."
                 #vm = dvm.DalvikVMFormat(a.get_all_dex())
             else:
                 print "INVALID APK"
         elif ret_type == "DEX":
             try:
-                vms = [dvm.DalvikVMFormat(open(self.target, "rb").read())]
+                #vms = [dvm.DalvikVMFormat(open(self.target, "rb").read())]
+                vm = dvm.DalvikVMFormat(open(self.target, "rb").read())
             except Exception, e:
                 print "INVALID DEX", e
         else:
@@ -87,7 +89,8 @@ class BuildGraphPlugin(DissectorPlugin):
         print "added all vms, analyzing.."
 
         #vm.set_classes_of_intetest(classes_of_interest)
-        vmx = analysis.newVMAnalysis(vms)
+        #vmx = analysis.newVMAnalysis(vms.pop())
+        vmx = analysis.VMAnalysis(vm)
         print "analyzed vms, creating graph.."
         self.gvmx = ganalysis.GVMAnalysis(vmx, a)
         print "graph created, saving to gexf.."

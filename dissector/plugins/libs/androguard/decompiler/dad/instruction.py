@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import dissector.plugins.libs.androguard.decompiler.dad.util as util
+import androguard.decompiler.dad.util as util
 
 class IRForm(object):
     def __init__(self):

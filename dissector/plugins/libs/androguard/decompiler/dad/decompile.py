@@ -21,8 +21,8 @@ sys.path.append('./')
 import logging
 import struct
 from collections import defaultdict
-import dissector.plugins.libs.androguard.core.androconf as androconf
-import dissector.plugins.libs.androguard.decompiler.dad.util as util
+import androguard.core.androconf as androconf
+import androguard.decompiler.dad.util as util
 from dissector.plugins.libs.androguard.core.analysis import analysis
 from dissector.plugins.libs.androguard.core.bytecodes import apk, dvm
 from dissector.plugins.libs.androguard.decompiler.dad.ast import (JSONWriter, parse_descriptor,

@@ -7316,6 +7316,7 @@ class DalvikVMFormat(bytecode._Bytecode):
             self.map_list = MapList( self.CM, self.__header.map_off, self )
 
             self.classes = self.map_list.get_item_type( "TYPE_CLASS_DEF_ITEM" )
+            print self.classes
             self.methods = self.map_list.get_item_type( "TYPE_METHOD_ID_ITEM" )
             self.fields = self.map_list.get_item_type( "TYPE_FIELD_ID_ITEM" )
             self.codes = self.map_list.get_item_type( "TYPE_CODE_ITEM" )
@@ -8188,6 +8189,11 @@ class DalvikVMFormat(bytecode._Bytecode):
             return escape_fct(str(operand[2]))
 
         return escape_fct(str(operand[1]))
+
+    ################################################################
+    #WARNING These are my additions WARNING#
+        
+    #################################################################
 
 
 class OdexHeaderItem(object):

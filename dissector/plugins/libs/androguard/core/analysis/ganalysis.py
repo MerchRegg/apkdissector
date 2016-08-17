@@ -21,6 +21,8 @@ from dissector.plugins.libs.androguard.core import bytecode
 from dissector.plugins.libs.androguard.core.bytecodes.dvm_permissions import DVM_PERMISSIONS
 from dissector.plugins.libs.androguard.core.analysis.risk import PERMISSIONS_RISK, INTERNET_RISK, PRIVACY_RISK, PHONE_RISK, SMS_RISK, MONEY_RISK
 from dissector.plugins.libs.androguard.core.analysis.analysis import PathVar, TAINTED_PACKAGE_CREATE
+from dissector.plugins.libs.networkx import convert
+from dissector.plugins.libs.networkx.exception import NetworkXError
 
 
 """Base class for undirected graphs.
@@ -800,8 +802,7 @@ class Graph(object):
                 u,v = e
                 dd = {}
             else:
-                raise NetworkXError(\
-                    "Edge tuple %s must be a 2-tuple or 3-tuple."%(e,))
+                raise NetworkXError("Edge tuple %s must be a 2-tuple or 3-tuple."%(e,))
             if u not in self.node:
                 self.adj[u] = {}
                 self.node[u] = {}

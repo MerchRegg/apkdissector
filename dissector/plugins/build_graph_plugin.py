@@ -75,7 +75,9 @@ class BuildGraphPlugin(DissectorPlugin):
                 print "getting dexes.."
                 dexes = [d for d in a.get_all_dex()]
                 print "dexes got!"
-                vm = dvm.DalvikVMFormat(dexes[1])
+                #vm = dvm.DalvikVMFormat(dexes[1])
+                for d in dexes:
+                    vms.append(dvm.DalvikVMFormat(d))
                 #vm = dvm.DalvikVMFormat(a.get_dex())
                 #         for d in a.get_all_dex():
                 #            print "adding vm.."
@@ -96,7 +98,8 @@ class BuildGraphPlugin(DissectorPlugin):
 
         #vm.set_classes_of_intetest(classes_of_interest)
         #vmx = analysis.newVMAnalysis(vms.pop())
-        vmx = analysis.VMAnalysis(vm)
+        #vmx = analysis.VMAnalysis(vm)
+        vmx = analysis.VMAnalysis(vms)
         print "analyzed vms, creating graph.."
         self.gvmx = ganalysis.GVMAnalysis(vmx, a)
         print "graph created, saving to gexf.."

@@ -1860,6 +1860,32 @@ class newVMAnalysis(object):
     def get_strings_analysis(self):
         return self.strings
 
+
+class MultidexVm(object):
+    def __init__(self, vms):
+        """
+        This should represent multiple DalvikVMFormat objects to implement multidex.
+        :param vms: the list of all parsed dex files
+        :type vms: a list of DalvikVMFormat
+        """
+        self._vms = vms
+
+    def get_all_fields(self):
+        fields = []
+        for vm in self._vms:
+            fields.append(vm.get_all_fields())
+        return fields
+
+    def get_methods(self):
+        methods = []
+        for vm in self._vms:
+            methods.append(vm.get_methods())
+        return methods
+
+    def get_api_version(self):
+        return self._vms[0].get_api_version()
+
+
 class VMAnalysis(object):
     """
        This class analyses a dex file
@@ -1870,8 +1896,8 @@ class VMAnalysis(object):
        :Example:
             VMAnalysis( DalvikVMFormat( read("toto.dex", binary=False) ) )
     """
-    def __init__(self, vm):
-        self.vm = vm
+    def __init__(self, vms):
+        self.vm = MultidexVm(vms)
 
         self.tainted_variables = TaintedVariables( self.vm )
         self.tainted_packages = TaintedPackages( self.vm )

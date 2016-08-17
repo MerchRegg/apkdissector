@@ -1,18 +1,16 @@
 from dissector.plugins.libs.androguard.core import androconf
-from PyQt5 import QtCore
+from PySide import QtCore
 
 from dissector.plugins.libs.androguard.misc import *
-import dissector.plugins.libs.androguard.session as session
 
+import os.path
 import traceback
 
-
 class FileLoadingThread(QtCore.QThread):
-    file_loaded = QtCore.pyqtSignal(bool)
 
-    def __init__(self, parent=None):
+    def __init__(self, session, parent=None):
         QtCore.QThread.__init__(self, parent)
-        self.parent = parent
+        self.session = session
 
         self.file_path = None
         self.incoming_file = ()
@@ -31,19 +29,17 @@ class FileLoadingThread(QtCore.QThread):
             try:
                 file_path, file_type = self.incoming_file
                 if file_type in ["APK", "DEX", "DEY"]:
-                    ret = self.parent.session.add(file_path,
-                                                  open(file_path, 'r').read())
-                    self.file_loaded.emit(ret)
-                elif file_type == "SESSION":
-                    self.parent.session = session.Load(file_path)
-                    self.file_loaded.emit(True)
-                else:
-                    self.file_loaded.emit(False)
+                    ret = self.session.add(file_path,
+                                           open(file_path, 'r').read())
+                    self.emit(QtCore.SIGNAL("loadedFile(bool)"), ret)
+                elif file_type == "SESSION" :
+                    self.session.load(file_path)
+                    self.emit(QtCore.SIGNAL("loadedFile(bool)"), True)
             except Exception as e:
                 androconf.debug(e)
                 androconf.debug(traceback.format_exc())
-                self.file_loaded.emit(False)
+                self.emit(QtCore.SIGNAL("loadedFile(bool)"), False)
 
             self.incoming_file = []
         else:
-            self.file_loaded.emit(False)
+            self.emit(QtCore.SIGNAL("loadedFile(bool)"), False)

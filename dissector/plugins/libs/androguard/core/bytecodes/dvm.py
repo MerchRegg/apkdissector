@@ -7304,6 +7304,40 @@ class DalvikVMFormat(bytecode._Bytecode):
         self._preload(buff)
         self._load(buff)
 
+##############################################################
+    # NOTE:This is my addition to support Multidex
+    def _init_(self, vms, decompiler=None, config=None, using_api=None):
+        """
+        Creates a DalvikVMFormat from a list of existing ones.
+        :param vms: a list of DalvikVMFormat
+        """
+        if using_api:
+            self.api_version = using_api
+        else:
+            self.api_version = CONF["DEFAULT_API"]
+        self.dexes = []
+        self.buff = None
+        for vm in vms:
+            self.dexes.append(vm.get_dex())
+            self.CMS.append(vm.CM)
+            self.buff += vm.get_dex
+
+        super(DalvikVMFormat, self).__init__(self.buff)
+
+        self.config = config
+        if not self.config:
+            self.config = {"RECODE_ASCII_STRING": CONF["RECODE_ASCII_STRING"],
+                           "RECODE_ASCII_STRING_METH": CONF["RECODE_ASCII_STRING_METH"],
+                           "LAZY_ANALYSIS": CONF["LAZY_ANALYSIS"]}
+
+        self.CM = ClassManager(self, self.config, self.CMS)
+        self.CM.set_decompiler(decompiler)
+
+        self._preload(buff)
+        self._load(buff)
+  ######################################################
+
+
     def _preload(self, buff):
         pass
 
@@ -7316,7 +7350,6 @@ class DalvikVMFormat(bytecode._Bytecode):
             self.map_list = MapList( self.CM, self.__header.map_off, self )
 
             self.classes = self.map_list.get_item_type( "TYPE_CLASS_DEF_ITEM" )
-            print self.classes
             self.methods = self.map_list.get_item_type( "TYPE_METHOD_ID_ITEM" )
             self.fields = self.map_list.get_item_type( "TYPE_FIELD_ID_ITEM" )
             self.codes = self.map_list.get_item_type( "TYPE_CODE_ITEM" )

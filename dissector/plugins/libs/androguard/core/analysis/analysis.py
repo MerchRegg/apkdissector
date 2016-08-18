@@ -155,6 +155,8 @@ class DVMBasicBlock(object):
         A simple basic block of a dalvik method
     """
     def __init__(self, start, vm, method, context):
+        # NOTE: when called from MethodAnalysis
+        # vm is DalvikVMFormat method is EncodedMethod and context is BasicBlocks
         self.__vm = vm
         self.method = method
         self.context = context
@@ -263,11 +265,15 @@ class DVMBasicBlock(object):
                 c[2].set_fathers( ( c[1], c[0], self ) )
 
     def push(self, i):
+        # NOTE: i is Instruction
       try:
+            # NOTE: updates the number of instructions in this DVMBasicBlock
             self.nb_instructions += 1
             idx = self.end
             self.last_length = i.get_length()
             self.end += self.last_length
+            # NOTE: idx is set at the end of the previous instruction and
+            # self.end is now at the end of the new instruction pushed
 
             op_value = i.get_op_value()
 
@@ -1304,9 +1310,11 @@ class BasicBlocks(object):
         This class represents all basic blocks of a method
     """
     def __init__(self, _vm, tv):
+        # in VMAnalysis _vm is DalvikVMFormat and tv is VMAnalysis
         self.__vm = _vm
         self.tainted = tv
 
+        # in VMAnalysis this is a list of DVMBasicBlock
         self.bb = []
 
     def push(self, bb):
@@ -1434,30 +1442,39 @@ class MethodAnalysis(object):
         self.__vm = vm
         self.method = method
 
+        # NOTE:tv when called from VMAnalysis is of type VMAnalysis
         self.tainted = tv
 
         self.basic_blocks = BasicBlocks(self.__vm, self.tainted)
         self.exceptions = Exceptions(self.__vm)
 
+        # NOTE:code is of type DalvikCode
         code = self.method.get_code()
         if code == None:
             return
 
+        # NOTE:current_basic is DVMBasicBlock
         current_basic = BO["BasicClass"](0, self.__vm, self.method, self.basic_blocks)
         self.basic_blocks.push(current_basic)
 
         ##########################################################
 
+        # NOTE: bc is DCode
         bc = code.get_bc()
+        # NOTE: l is the list of the offset of the instruction found one by one
+        # h is the dictionary for jumps: idx to idx (offset istr1--->offset istr2)
         l = []
         h = {}
         idx = 0
 
         debug("Parsing instructions")
+        # NOTE: instructions are Instruction
         instructions = [i for i in bc.get_instructions()]
         for i in instructions:
             for j in BO["BasicOPCODES_H"]:
+                # NOTE: if i is a basic operation code (throw, if, switch, ...) finds the next instruction
                 if j.match(i.get_name()) != None:
+                    # NOTE: this calls dvm.determineNext()
                     v = BO["Dnext"](i, idx, self.method)
                     h[ idx ] = v
                     l.extend(v)
@@ -1466,6 +1483,7 @@ class MethodAnalysis(object):
             idx += i.get_length()
 
         debug("Parsing exceptions")
+        # NOTE: calls dvm.determineException()
         excepts = BO["Dexception"]( self.__vm, self.method )
         for i in excepts:
             l.extend( [i[0]] )
@@ -1476,11 +1494,12 @@ class MethodAnalysis(object):
         idx = 0
         for i in instructions:
             # index is a destination
+            # NOTE: if the current offset is of a method to jump to, adds its DVMBasicBlock to the BasicBlocks
             if idx in l:
                 if current_basic.get_nb_instructions() != 0:
                     current_basic = BO["BasicClass"](current_basic.get_end(), self.__vm, self.method, self.basic_blocks)
                     self.basic_blocks.push(current_basic)
-
+            # NOTE: adds to the current DVMBasicBlock the current instruction
             current_basic.push(i)
 
             # index is a branch instruction
@@ -1896,8 +1915,9 @@ class VMAnalysis(object):
        :Example:
             VMAnalysis( DalvikVMFormat( read("toto.dex", binary=False) ) )
     """
-    def __init__(self, vms):
-        self.vm = MultidexVm(vms)
+    def __init__(self, vm):
+        #self.vm = MultidexVm(vms)
+        self.vm = vm
 
         self.tainted_variables = TaintedVariables( self.vm )
         self.tainted_packages = TaintedPackages( self.vm )
@@ -1908,12 +1928,14 @@ class VMAnalysis(object):
 
         self.signature = None
 
+        # NOTE:adds in tainted_variables._vars{} all the fields in the given dex(DalvikVMFormat)
         for i in self.vm.get_all_fields():
             self.tainted_variables.add( [ i.get_class_name(), i.get_descriptor(), i.get_name() ], TAINTED_FIELD )
 
         self.methods = []
         self.hmethods = {}
         self.__nmethods = {}
+        # NOTE:gets all EncodedMethods in all classes in the dex(DalvikVMFormat)
         for i in self.vm.get_methods():
             x = MethodAnalysis( self.vm, i, self )
             self.methods.append( x )

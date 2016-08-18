@@ -64,6 +64,7 @@ class BuildGraphPlugin(DissectorPlugin):
         Analyzes an apk or dex file specified and saves it.
         """
         ret_type = androconf.is_android(self.target)
+        androconf.set_debug()
         vm = None
         vms = []
         dexes = []

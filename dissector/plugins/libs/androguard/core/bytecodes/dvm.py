@@ -356,6 +356,9 @@ class HeaderItem(object):
         :type cm: :class:`ClassManager`
     """
     def __init__(self, size, buff, cm):
+        # NOTE: size is passed as 0
+        # buff in DalvikVMFormat.load is DalvikVMFormat
+        # cm is buff's ClassManager
         self.__CM = cm
 
         self.offset = buff.get_idx()
@@ -6900,6 +6903,22 @@ class ClassManager(object):
         if self.vm != None:
             self.odex_format = self.vm.get_format_type() == "ODEX"
 
+##############################################################
+# NOTE:This is my addition to support Multidex
+    def _init_multidex_(self, CMS):
+        for cm in CMS:
+            self.__manage_item.update(cm.__manage_item)
+            self.__manage_item_off += cm.__manage_item_off
+            self.__strings_off.update(cm.__strings_off)
+            self.__obj_offset.update(cm.__obj_offset)
+            self.__item_offset.update(cm.__item_offset)
+            self.__cached_proto.update(cm.__cached_proto)
+            self.hook_strings.update(cm.hook_strings)
+
+        if self.vm != None:
+            self.odex_format = self.vm.get_format_type() == "ODEX"
+##############################################################
+
     def get_ascii_string(self, s):
         try:
             return s.decode("ascii")
@@ -7168,11 +7187,15 @@ class ClassManager(object):
 
         return DebugInfoItem( self.buff, self )
 
+
 class MapList(object):
     """
        This class can parse the "map_list" of the dex format
     """
     def __init__(self, cm, off, buff):
+        # NOTE: cm is ClassManager
+        # off is the offset to the maplist in dex
+        # buff is DalvikVMFormat
         self.CM = cm
 
         buff.set_idx( off )
@@ -7280,33 +7303,36 @@ class DalvikVMFormat(bytecode._Bytecode):
           DalvikVMFormat( read("classes.dex") )
     """
     def __init__(self, buff, decompiler=None, config=None, using_api=None):
-        #to allow to pass apk object ==> we do not need to pass additionally target version
-        if isinstance(buff, APK):
-            self.api_version = buff.get_target_sdk_version()
-            buff = buff.get_dex() #getting dex from APK file
-        elif using_api:
-            self.api_version = using_api
+        if isinstance(buff, list):
+            self._init_multidex_(buff, decompiler, config, using_api)
         else:
-            self.api_version = CONF["DEFAULT_API"]
-            
-        #TODO: can using_api be added to config parameter?    
-        super(DalvikVMFormat, self).__init__(buff)
-        
-        self.config = config
-        if not self.config:
-          self.config = {"RECODE_ASCII_STRING": CONF["RECODE_ASCII_STRING"],
-                         "RECODE_ASCII_STRING_METH": CONF["RECODE_ASCII_STRING_METH"],
-                         "LAZY_ANALYSIS": CONF["LAZY_ANALYSIS"]}
+            #to allow to pass apk object ==> we do not need to pass additionally target version
+            if isinstance(buff, APK):
+                self.api_version = buff.get_target_sdk_version()
+                buff = buff.get_dex() #getting dex from APK file
+            elif using_api:
+                self.api_version = using_api
+            else:
+                self.api_version = CONF["DEFAULT_API"]
 
-        self.CM = ClassManager(self, self.config)
-        self.CM.set_decompiler(decompiler)
+            #TODO: can using_api be added to config parameter?
+            super(DalvikVMFormat, self).__init__(buff)
 
-        self._preload(buff)
-        self._load(buff)
+            self.config = config
+            if not self.config:
+              self.config = {"RECODE_ASCII_STRING": CONF["RECODE_ASCII_STRING"],
+                             "RECODE_ASCII_STRING_METH": CONF["RECODE_ASCII_STRING_METH"],
+                             "LAZY_ANALYSIS": CONF["LAZY_ANALYSIS"]}
+
+            self.CM = ClassManager(self, self.config)
+            self.CM.set_decompiler(decompiler)
+
+            self._preload(buff)
+            self._load(buff)
 
 ##############################################################
     # NOTE:This is my addition to support Multidex
-    def _init_(self, vms, decompiler=None, config=None, using_api=None):
+    def _init_multidex_(self, vms, decompiler=None, config=None, using_api=None):
         """
         Creates a DalvikVMFormat from a list of existing ones.
         :param vms: a list of DalvikVMFormat
@@ -7315,12 +7341,21 @@ class DalvikVMFormat(bytecode._Bytecode):
             self.api_version = using_api
         else:
             self.api_version = CONF["DEFAULT_API"]
+        # NOTE: dexes is the list of all dexes
+        # CMS is the list of ClassManager of every dex
+        # buff should represent the dexes concatenated
         self.dexes = []
-        self.buff = None
+        self.CMS = []
         for vm in vms:
-            self.dexes.append(vm.get_dex())
             self.CMS.append(vm.CM)
-            self.buff += vm.get_dex
+            self.dexes.append(vm._Bytecode__buff)
+            print vm._Bytecode__buff is None
+
+        self.buff = self.dexes[0]
+        for dex in self.dexes[1:]:
+            self.buff += dex
+
+        print "initialized"
 
         super(DalvikVMFormat, self).__init__(self.buff)
 
@@ -7330,11 +7365,15 @@ class DalvikVMFormat(bytecode._Bytecode):
                            "RECODE_ASCII_STRING_METH": CONF["RECODE_ASCII_STRING_METH"],
                            "LAZY_ANALYSIS": CONF["LAZY_ANALYSIS"]}
 
-        self.CM = ClassManager(self, self.config, self.CMS)
+        self.CM = ClassManager(self, self.config)
+        print "CM got"
+        self.CM._init_multidex_(self.CMS)
         self.CM.set_decompiler(decompiler)
+        print "Multidex cm got"
 
-        self._preload(buff)
-        self._load(buff)
+        self._preload(self.buff)
+        self._load(self.buff)
+        print "loaded!"
   ######################################################
 
 

@@ -64,7 +64,7 @@ class BuildGraphPlugin(DissectorPlugin):
         Analyzes an apk or dex file specified and saves it.
         """
         ret_type = androconf.is_android(self.target)
-        androconf.set_debug()
+        #androconf.set_debug()
         vm = None
         vms = []
         dexes = []
@@ -79,6 +79,8 @@ class BuildGraphPlugin(DissectorPlugin):
                 #vm = dvm.DalvikVMFormat(dexes[1])
                 for d in dexes:
                     vms.append(dvm.DalvikVMFormat(d))
+                    print "dvm appended"
+                    print vms[0]._Bytecode__buff is None
                 #vm = dvm.DalvikVMFormat(a.get_dex())
                 #         for d in a.get_all_dex():
                 #            print "adding vm.."
@@ -100,7 +102,10 @@ class BuildGraphPlugin(DissectorPlugin):
         #vm.set_classes_of_intetest(classes_of_interest)
         #vmx = analysis.newVMAnalysis(vms.pop())
         #vmx = analysis.VMAnalysis(vm)
-        vmx = analysis.VMAnalysis(vms)
+        print "creating multidex DalvikVMFormat"
+        multidex_vm = dvm.DalvikVMFormat(vms)
+        print "multidex DalvikVMFormat created!"
+        vmx = analysis.VMAnalysis(multidex_vm)
         print "analyzed vms, creating graph.."
         self.gvmx = ganalysis.GVMAnalysis(vmx, a)
         print "graph created, saving to gexf.."

@@ -32,17 +32,20 @@ class TestBuildGraphPlugin(TestCase):
     """
     """
 
-
+    #Questo test taglia i nodi delle classi specificate e crea il sottografo delle classi specificate
     def test_trim_sub(self):
         right_dir = "/home/marco/apks/testapp/vulnerable.apk"
         subbed_dir = "/home/marco/apks/testapp/trimmed_subbed2.gexf"
+        choosen_classes = ["org/sid/vulnerableappjni/MediaActivity"]
+        class_to_trim = "android/support"
 
         buildgraph = BuildGraphPlugin(right_dir)
-        buildgraph.analyze(["Landroid/content/Intent;"])
-        buildgraph.trim_sub_save(["org/sid/vulnerableappjni/MediaActivity"], "android/support", subbed_dir)
+        #buildgraph.analyze(["Landroid/content/Intent;"])
+        buildgraph.analyze()
+        buildgraph.trim_sub_save(choosen_classes, class_to_trim, subbed_dir)
 
 
-
+    #Questo test crea il sottografo delle classi specificate
     def test_sub(self):
         right_dir = "/home/marco/apks/testapp/vulnerable.apk"
         subbed_dir = "/home/marco/apks/testapp/vulnerable_graph_subbed.gexf"
@@ -53,12 +56,13 @@ class TestBuildGraphPlugin(TestCase):
         buildgraph.subbed_analysis_to_file(subbed_dir)
     """
 
+    # Questo test taglia i nodi delle classi specificate e crea il grafo rimanente
     def test_trim(self):
-        right_dir = "/home/marco/apks/testapp/vulnerable.apk"
-        #right_dir = "/home/marco/apks/facebook/com.facebook.katana_v89.0.0.17.70.apk"
+        #right_dir = "/home/marco/apks/testapp/vulnerable.apk"
+        right_dir = "/home/marco/apks/facebook/com.facebook.katana_v89.0.0.17.70.apk"
         #right_dir = "/home/marco/apks/twitter/com.twitter.android_caac238c.apk"
-        trimmed_dir = "/home/marco/apks/testapp/vulnerable_graph_trimmed.gexf"
-        #trimmed_dir = "/home/marco/apks/facebook/trimmed_facebook.gexf"
+        #trimmed_dir = "/home/marco/apks/testapp/vulnerable_graph_trimmed.gexf"
+        trimmed_dir = "/home/marco/apks/facebook/trimmed_facebook.gexf"
         #trimmed_dir = "/home/marco/apks/twitter/trimmed_twitter.gexf"
         buildgraph = BuildGraphPlugin(right_dir)
         buildgraph.analyze()

@@ -80,7 +80,6 @@ class BuildGraphPlugin(DissectorPlugin):
                 for d in dexes:
                     vms.append(dvm.DalvikVMFormat(d))
                     print "dvm appended"
-                    print vms[0]._Bytecode__buff is None
                 #vm = dvm.DalvikVMFormat(a.get_dex())
                 #         for d in a.get_all_dex():
                 #            print "adding vm.."
@@ -99,11 +98,9 @@ class BuildGraphPlugin(DissectorPlugin):
             raise ValueError("Invalid target to analyze!")
         print "added all vms, analyzing.."
 
-        #vm.set_classes_of_intetest(classes_of_interest)
-        #vmx = analysis.newVMAnalysis(vms.pop())
-        #vmx = analysis.VMAnalysis(vm)
         print "creating multidex DalvikVMFormat"
         multidex_vm = dvm.DalvikVMFormat(vms)
+        multidex_vm.set_classes_of_intetest(classes_of_interest)
         print "multidex DalvikVMFormat created!"
         vmx = analysis.VMAnalysis(multidex_vm)
         print "analyzed vms, creating graph.."

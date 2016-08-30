@@ -1027,7 +1027,10 @@ class TaintedPackages(object):
             for j in paths:
                 if j.get_access_flag() == TAINTED_PACKAGE_CALL:
                   dst_class_name, _, _ = j.get_dst(self.__vm.get_class_manager())
-                  if dst_class_name in classes and m.get_name() in classes:
+                  # this is to append packages not in the classes section of the analyzed .dex
+                  interesting = dst_class_name in self.__vm.classes_of_interest or m.get_name() in self.__vm.classes_of_interest
+                  #
+                  if dst_class_name in classes and m.get_name() in classes or interesting:
                     l.append(j)
         return l
 

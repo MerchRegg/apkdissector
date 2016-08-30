@@ -7375,6 +7375,16 @@ class DalvikVMFormat(bytecode._Bytecode):
         self._load(self.buff)
         print "loaded!"
   ######################################################
+  #NOTE: this is my addition for analyzing interesting classes not found with standard analysis
+    def set_classes_of_intetest(self, list):
+        """
+        Adds a list of interesting classes to be used in future operations
+        :param list: the list of class names
+        :type list: should be a list of string
+        """
+        import copy
+        self.classes_of_interest = copy.deepcopy(list)
+  ######################################################
 
 
     def _preload(self, buff):

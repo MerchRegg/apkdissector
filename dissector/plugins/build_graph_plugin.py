@@ -109,7 +109,7 @@ class BuildGraphPlugin(DissectorPlugin):
         self.analysis = self.gvmx.export_to_gexf()
         print("Done.")
 
-        log  =  open("log.log" , "wr")
+        #log  =  open("log.log" , "wr")
         #for i in vm.get_all_fields():
             #print i.show()
         """
@@ -221,7 +221,7 @@ class BuildGraphPlugin(DissectorPlugin):
         temp = self.gvmx.G
         self.trim_graph(trim_regex)
         self.sub(class_names)
-        print "post sub"
+        #print "post sub"
         self.gvmx.G = temp
         if self.class_subbed_analysis is not None:
             androconf.save_to_disk(self.class_subbed_analysis, path)

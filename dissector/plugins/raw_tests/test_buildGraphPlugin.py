@@ -56,11 +56,11 @@ class TestBuildGraphPlugin(TestCase):
     # Questo test taglia i nodi delle classi specificate e crea il grafo rimanente
     def test_trim(self):
         #right_dir = "/home/marco/apks/testapp/vulnerable.apk"
-        #right_dir = "/home/marco/apks/facebook/com.facebook.katana_v89.0.0.17.70.apk"
-        right_dir = "/home/marco/apks/twitter/com.twitter.android_caac238c.apk"
+        right_dir = "/home/marco/apks/facebook/facebook97.0.0.18.69.apk"
+        #right_dir = "/home/marco/apks/twitter/com.twitter.android_caac238c.apk"
         #trimmed_dir = "/home/marco/apks/testapp/vulnerable_graph_trimmed.gexf"
-        #trimmed_dir = "/home/marco/apks/facebook/trimmed_facebook.gexf"
-        trimmed_dir = "/home/marco/apks/twitter/trimmed_twitter.gexf"
+        trimmed_dir = "/home/marco/apks/facebook/trimmed_facebook.gexf"
+        #trimmed_dir = "/home/marco/apks/twitter/trimmed_twitter.gexf"
 
         classes_of_interest = ["Landroid/content/Intent;"]
         buildgraph = BuildGraphPlugin(right_dir)

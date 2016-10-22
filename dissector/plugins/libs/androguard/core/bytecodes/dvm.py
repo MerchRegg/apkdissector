@@ -7375,7 +7375,7 @@ class DalvikVMFormat(bytecode._Bytecode):
         self._load(self.buff)
         print "loaded!"
   ######################################################
-  #NOTE: this is my addition for analyzing interesting classes not found with standard analysis
+    #NOTE: this is my addition for analyzing interesting classes not found with standard analysis
     def set_classes_of_intetest(self, list):
         """
         Adds a list of interesting classes to be used in future operations
@@ -7384,6 +7384,16 @@ class DalvikVMFormat(bytecode._Bytecode):
         """
         import copy
         self.classes_of_interest = copy.deepcopy(list)
+
+    # NOTE: this is my addition for exclude from analysis the given set of classes
+    def set_classes_to_exclude(self, list):
+        """
+        Adds a list of not interesting classes to be exclude in future analysis
+        :param list: the list of class names
+        :type list: should be a list of string
+        """
+        import copy
+        self.classes_to_exclude = copy.deepcopy(list)
   ######################################################
 
 

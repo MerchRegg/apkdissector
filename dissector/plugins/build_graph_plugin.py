@@ -65,18 +65,15 @@ class BuildGraphPlugin(DissectorPlugin):
         """
         ret_type = androconf.is_android(self.target)
         #androconf.set_debug()
-        vm = None
         vms = []
         dexes = []
         a = None
         if ret_type == "APK":
             a = apk.APK(self.target)
             if a.is_valid_APK():
-                #dexes.append(a.get_all_dex())
                 print "getting dexes.."
                 dexes = [d for d in a.get_all_dex()]
                 print "dexes got!"
-                #vm = dvm.DalvikVMFormat(dexes[1])
                 for d in dexes:
                     vms.append(dvm.DalvikVMFormat(d))
                     print "dvm appended"
@@ -90,8 +87,7 @@ class BuildGraphPlugin(DissectorPlugin):
                 print "INVALID APK"
         elif ret_type == "DEX":
             try:
-                #vms = [dvm.DalvikVMFormat(open(self.target, "rb").read())]
-                vm = dvm.DalvikVMFormat(open(self.target, "rb").read())
+                vms = dvm.DalvikVMFormat(open(self.target, "rb").read())
             except Exception, e:
                 print "INVALID DEX", e
         else:
@@ -100,7 +96,7 @@ class BuildGraphPlugin(DissectorPlugin):
 
         print "creating multidex DalvikVMFormat"
         multidex_vm = dvm.DalvikVMFormat(vms)
-        multidex_vm.set_classes_of_intetest(classes_of_interest)
+        multidex_vm.set_classes_of_interest(classes_of_interest)
         print "multidex DalvikVMFormat created!"
         vmx = analysis.VMAnalysis(multidex_vm)
         print "analyzed vms, creating graph.."

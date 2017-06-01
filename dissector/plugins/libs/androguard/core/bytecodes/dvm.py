@@ -7349,7 +7349,6 @@ class DalvikVMFormat(bytecode._Bytecode):
         for vm in vms:
             self.CMS.append(vm.CM)
             self.dexes.append(vm._Bytecode__buff)
-            print vm._Bytecode__buff is None
 
         self.buff = self.dexes[0]
         for dex in self.dexes[1:]:

@@ -535,6 +535,7 @@ class TaintedVariables(object):
             if var not in self.__vars[ TAINTED_LOCAL_VARIABLE ][ _method ]:
                 self.__vars[ TAINTED_LOCAL_VARIABLE ][ _method ][ var ] = TaintedVariable( var, _type )
 
+    #TaintedVariables
     def push_info(self, _type, var, access, idx, ref):
         if _type == TAINTED_FIELD:
             self.add( var, _type )
@@ -1031,9 +1032,8 @@ class TaintedPackages(object):
                   interesting = dst_class_name in self.__vm.classes_of_interest or m.get_name() in self.__vm.classes_of_interest
                   # NOTE: this is to exclude the packages in less interesting classes such as "support"
                   exclude = st_class_name in self.__vm.classes_to_exclude or m.get_name() in self.__vm.classes_to_exclude
-                  #
-
                   if dst_class_name in classes and m.get_name() in classes and not exclude or interesting:
+                    #
                     l.append(j)
         return l
 
@@ -1443,7 +1443,7 @@ class MethodAnalysis(object):
         :param tv: a virtual object to get access to tainted information
         :type vm: a :class:`DalvikVMFormat` object
         :type method: a :class:`EncodedMethod` object
-    """
+    """ 
     def __init__(self, vm, method, tv):
         self.__vm = vm
         self.method = method
@@ -1467,7 +1467,6 @@ class MethodAnalysis(object):
 
         # NOTE: bc is DCode
         bc = code.get_bc()
-        # NOTE: l is the list of the offset of the instruction found one by one
         # h is the dictionary for jumps: idx to idx (offset istr1--->offset istr2)
         l = []
         h = {}
@@ -1500,7 +1499,6 @@ class MethodAnalysis(object):
         idx = 0
         for i in instructions:
             # index is a destination
-            # NOTE: if the current offset is of a method to jump to, adds its DVMBasicBlock to the BasicBlocks
             if idx in l:
                 if current_basic.get_nb_instructions() != 0:
                     current_basic = BO["BasicClass"](current_basic.get_end(), self.__vm, self.method, self.basic_blocks)
